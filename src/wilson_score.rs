@@ -35,11 +35,8 @@ mod tests {
     use crate::Proportion;
 
     #[test]
-    fn it_works() {
-        let sample = Sample {
-            size: 20,
-            proportion: Proportion::NSuccesses(10_u32),
-        };
+    fn wilson_score_ok() {
+        let sample = Sample::new(20, Proportion::NSuccesses(10_u32)).unwrap();
         let interval = sample.wilson_score_interval(1.960);
         assert_relative_eq!(interval.mean, 0.5);
         assert_relative_eq!(interval.margin, 0.20070508557018008);

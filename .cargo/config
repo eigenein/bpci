@@ -1,0 +1,5 @@
+[alias]
+c = "check"
+cc = "clippy"
+o = "outdated"
+t = "test"

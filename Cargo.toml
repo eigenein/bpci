@@ -1,0 +1,20 @@
+[package]
+name = "bpci"
+description = "Binomial proportion confidence intervals"
+version = "0.0.0"
+edition = "2021"
+authors = ["Pavel Perestoronin <eigenein@gmail.com>"]
+readme = "README.md"
+repository = "https://github.com/eigenein/bpci"
+license = "MIT"
+keywords = ["statistics", "data-analysis"]
+categories = ["mathematics", "science", "algorithms"]
+
+[features]
+default = []
+
+[dependencies]
+num-traits = "0.2.15"
+
+[dev-dependencies]
+approx = "0.5.1"

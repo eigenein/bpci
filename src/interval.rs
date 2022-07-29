@@ -1,31 +1,27 @@
-use std::ops::{Add, Sub};
+pub mod lower_upper;
+pub mod mean_margin;
 
-/// Represents a resulting interval.
-pub struct Interval<T = f64> {
-    pub mean: T,
-    pub margin: T,
-}
+pub use self::lower_upper::*;
+pub use self::mean_margin::*;
 
-impl<T: Sub<Output = T> + Copy> Interval<T> {
-    /// Get the lower bound.
+pub trait Interval<F> {
+    /// Returns the interval's mean.
     #[must_use]
-    pub fn lower(&self) -> T {
-        self.mean - self.margin
-    }
-}
+    fn mean(&self) -> F;
 
-impl<T: Add<Output = T> + Copy> Interval<T> {
-    /// Get the upper bound.
+    /// Returns the interval's margin.
     #[must_use]
-    pub fn upper(&self) -> T {
-        self.mean + self.margin
-    }
-}
+    fn margin(&self) -> F;
 
-impl<T: Add<Output = T> + Sub<Output = T> + Copy> Interval<T> {
-    /// Get the lower and upper bound as a 2-tuple.
+    /// Returns the interval's lower bound.
     #[must_use]
-    pub fn bounds(&self) -> (T, T) {
-        (self.lower(), self.upper())
-    }
+    fn lower(&self) -> F;
+
+    /// Returns the interval's upper bound.
+    #[must_use]
+    fn upper(&self) -> F;
+
+    /// Returns the interval's bounds as a 2-tuple.
+    #[must_use]
+    fn bounds(&self) -> (F, F);
 }

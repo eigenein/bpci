@@ -5,9 +5,10 @@ pub mod sample;
 pub mod wilson_score;
 
 pub use self::error::Error;
-pub use self::interval::Interval;
+pub use self::interval::*;
 pub use self::result::Result;
 pub use self::sample::*;
+pub use self::wilson_score::*;
 
 #[cfg(doctest)]
 mod test_readme {

@@ -26,4 +26,8 @@ pub trait Interval<F> {
     /// Returns the interval's bounds as a 2-tuple.
     #[must_use]
     fn bounds(&self) -> (F, F);
+
+    /// Returns whether the interval contains the specified point.
+    #[must_use]
+    fn contains(&self, point: F) -> bool;
 }

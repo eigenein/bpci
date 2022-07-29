@@ -13,7 +13,10 @@ pub struct CenteredInterval<T> {
     pub margin: T,
 }
 
-impl<T: Add<Output = T> + Sub<Output = T> + Copy> Interval<T> for CenteredInterval<T> {
+impl<T> Interval<T> for CenteredInterval<T>
+where
+    T: Add<Output = T> + Sub<Output = T> + Copy + PartialOrd,
+{
     #[inline]
     fn mean(&self) -> T {
         self.mean
@@ -38,11 +41,16 @@ impl<T: Add<Output = T> + Sub<Output = T> + Copy> Interval<T> for CenteredInterv
     fn bounds(&self) -> (T, T) {
         (self.lower(), self.upper())
     }
+
+    #[inline]
+    fn contains(&self, point: T) -> bool {
+        point >= self.lower() && point <= self.upper()
+    }
 }
 
 impl<T> From<BoundedInterval<T>> for CenteredInterval<T>
 where
-    T: Copy + Add<Output = T> + Div<Output = T> + Sub<Output = T> + One,
+    T: Copy + Add<Output = T> + Div<Output = T> + Sub<Output = T> + One + PartialOrd,
 {
     fn from(interval: BoundedInterval<T>) -> Self {
         Self {

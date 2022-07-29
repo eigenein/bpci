@@ -1,4 +1,4 @@
-use std::ops::{Add, Div, Sub};
+use std::ops::{Add, Div, Mul, Sub};
 
 use num_traits::One;
 
@@ -47,6 +47,34 @@ where
         Self {
             mean: interval.mean(),
             margin: interval.margin(),
+        }
+    }
+}
+
+impl<T> Add<T> for MeanMarginInterval<T>
+where
+    T: Copy + Add<Output = T>,
+{
+    type Output = Self;
+
+    fn add(self, rhs: T) -> Self::Output {
+        Self {
+            mean: self.mean + rhs,
+            margin: self.margin,
+        }
+    }
+}
+
+impl<T> Mul<T> for MeanMarginInterval<T>
+where
+    T: Copy + Mul<Output = T>,
+{
+    type Output = Self;
+
+    fn mul(self, rhs: T) -> Self::Output {
+        Self {
+            mean: self.mean * rhs,
+            margin: self.margin * rhs,
         }
     }
 }

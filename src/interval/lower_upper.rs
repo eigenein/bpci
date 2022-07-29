@@ -1,4 +1,4 @@
-use std::ops::{Add, Div, Sub};
+use std::ops::{Add, Div, Mul, Sub};
 
 use num_traits::One;
 
@@ -49,6 +49,34 @@ where
         Self {
             lower: interval.lower(),
             upper: interval.upper(),
+        }
+    }
+}
+
+impl<T> Add<T> for LowerUpperInterval<T>
+where
+    T: Copy + Add<Output = T>,
+{
+    type Output = Self;
+
+    fn add(self, rhs: T) -> Self::Output {
+        Self {
+            lower: self.lower + rhs,
+            upper: self.upper + rhs,
+        }
+    }
+}
+
+impl<T> Mul<T> for LowerUpperInterval<T>
+where
+    T: Copy + Mul<Output = T>,
+{
+    type Output = Self;
+
+    fn mul(self, rhs: T) -> Self::Output {
+        Self {
+            lower: self.lower * rhs,
+            upper: self.upper * rhs,
         }
     }
 }

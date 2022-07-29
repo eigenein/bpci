@@ -23,11 +23,11 @@ fn main() {
 ### By size and proportion
 
 ```rust
-use bpci::PHatSample;
+use bpci::ProportionSample;
 
 fn main() {
     // 20 trials with 0.5 success rate:
-    let sample = PHatSample::new(20, 0.5).unwrap();
+    let sample = ProportionSample::new(20, 0.5).unwrap();
 }
 ```
 
@@ -40,7 +40,7 @@ use bpci::*;
 use approx::assert_relative_eq;
 
 fn main() {
-    let sample = PHatSample::new(100, 0.25).unwrap();
+    let sample = ProportionSample::new(100, 0.25).unwrap();
     let interval = sample.wilson_score(1.960); // 95%
     assert_relative_eq!(interval.lower(), 0.1754509400372426);
     assert_relative_eq!(interval.upper(), 0.3430464637007583);
@@ -54,7 +54,7 @@ use bpci::*;
 use approx::assert_relative_eq;
 
 fn main() {
-    let sample = PHatSample::new(100, 0.25).unwrap();
+    let sample = ProportionSample::new(100, 0.25).unwrap();
     let interval = sample.wilson_score_with_cc(1.960); // 95%
     assert_relative_eq!(interval.lower(), 0.17117438961361867);
     assert_relative_eq!(interval.upper(), 0.34838596518606424);
@@ -68,7 +68,7 @@ use bpci::*;
 use approx::assert_relative_eq;
 
 fn main() {
-    let sample = PHatSample::new(40, 0.25).unwrap();
+    let sample = ProportionSample::new(40, 0.25).unwrap();
     let interval = sample.agresti_coull(1.960); // 95%
     assert_relative_eq!(interval.mean, 0.2719061348125981);
     assert_relative_eq!(interval.margin, 0.1317091851034039);
@@ -82,7 +82,7 @@ use bpci::*;
 use approx::assert_relative_eq;
 
 fn main() {
-    let sample = PHatSample::new(100, 0.3).unwrap();
+    let sample = ProportionSample::new(100, 0.3).unwrap();
     let interval = sample.wald(1.960); // 95%
     assert_relative_eq!(interval.lower(), 0.2101815163788655);
     assert_relative_eq!(interval.upper(), 0.38981848362113447);

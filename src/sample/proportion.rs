@@ -6,12 +6,12 @@ use num_traits::{One, Zero};
 use crate::{Error, NSuccessesSample, Result, Sample};
 
 /// Represents a sample with its size and proportion.
-pub struct PHatSample<N, P> {
+pub struct ProportionSample<N, P> {
     pub(crate) size: N,
     pub(crate) proportion: P,
 }
 
-impl<N, P> PHatSample<N, P>
+impl<N, P> ProportionSample<N, P>
 where
     N: Debug + Zero + PartialOrd,
     P: Zero + One + Debug + PartialOrd,
@@ -27,7 +27,7 @@ where
     }
 }
 
-impl<N: Copy, P: Copy> Sample<N, P> for PHatSample<N, P> {
+impl<N: Copy, P: Copy> Sample<N, P> for ProportionSample<N, P> {
     fn size(&self) -> N {
         self.size
     }
@@ -37,7 +37,7 @@ impl<N: Copy, P: Copy> Sample<N, P> for PHatSample<N, P> {
     }
 }
 
-impl<N, P> From<NSuccessesSample<N>> for PHatSample<N, P>
+impl<N, P> From<NSuccessesSample<N>> for ProportionSample<N, P>
 where
     N: Copy + Into<P>,
     P: Div<Output = P>,

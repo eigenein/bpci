@@ -1,10 +1,10 @@
 //! Sample trait and structures.
 
 pub mod n_successes;
-pub mod p_hat;
+pub mod proportion;
 
 pub use self::n_successes::*;
-pub use self::p_hat::*;
+pub use self::proportion::*;
 
 pub trait Sample<N, P> {
     fn size(&self) -> N;

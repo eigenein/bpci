@@ -100,7 +100,7 @@ mod tests {
     #[test]
     /// Verified with Wolfram Alpha.
     fn wilson_score_with_cc_ok() {
-        let sample = PHatSample::new(20, 0.4).unwrap();
+        let sample = ProportionSample::new(20, 0.4).unwrap();
         let interval = sample.wilson_score_with_cc(1.960);
         assert_relative_eq!(interval.lower, 0.19976843301470645);
         assert_relative_eq!(interval.upper, 0.6358867106798909);

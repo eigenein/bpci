@@ -1,6 +1,8 @@
-use std::ops::{Add, Sub};
+use std::ops::{Add, Div, Sub};
 
-use crate::Interval;
+use num_traits::One;
+
+use crate::{Interval, LowerUpperInterval};
 
 /// Represents an interval with its mean and margin.
 #[must_use]
@@ -34,5 +36,17 @@ impl<T: Add<Output = T> + Sub<Output = T> + Copy> Interval<T> for MeanMarginInte
     #[inline]
     fn bounds(&self) -> (T, T) {
         (self.lower(), self.upper())
+    }
+}
+
+impl<T> From<LowerUpperInterval<T>> for MeanMarginInterval<T>
+where
+    T: Copy + Add<Output = T> + Div<Output = T> + Sub<Output = T> + One,
+{
+    fn from(interval: LowerUpperInterval<T>) -> Self {
+        Self {
+            mean: interval.mean(),
+            margin: interval.margin(),
+        }
     }
 }

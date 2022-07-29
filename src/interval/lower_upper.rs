@@ -2,7 +2,7 @@ use std::ops::{Add, Div, Sub};
 
 use num_traits::One;
 
-use crate::Interval;
+use crate::{Interval, MeanMarginInterval};
 
 /// Interval represented by its lower and upper bounds.
 #[must_use]
@@ -38,5 +38,17 @@ impl<T: Copy + One + Add<Output = T> + Sub<Output = T> + Div<Output = T>> Interv
     #[inline]
     fn bounds(&self) -> (T, T) {
         (self.lower, self.upper)
+    }
+}
+
+impl<T> From<MeanMarginInterval<T>> for LowerUpperInterval<T>
+where
+    T: Copy + Add<Output = T> + Sub<Output = T>,
+{
+    fn from(interval: MeanMarginInterval<T>) -> Self {
+        Self {
+            lower: interval.lower(),
+            upper: interval.upper(),
+        }
     }
 }

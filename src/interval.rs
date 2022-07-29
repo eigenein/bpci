@@ -6,7 +6,7 @@ pub mod centered;
 pub use self::bounded::*;
 pub use self::centered::*;
 
-pub trait Interval<F> {
+pub trait Interval<F>: PartialOrd<Self> + PartialOrd<F> {
     /// Returns the interval's mean.
     #[must_use]
     fn mean(&self) -> F;

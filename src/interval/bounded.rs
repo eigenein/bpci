@@ -88,19 +88,38 @@ where
     }
 }
 
-impl<T> PartialEq for BoundedInterval<T> {
+impl<T> PartialEq<Self> for BoundedInterval<T> {
     #[must_use]
     fn eq(&self, _other: &Self) -> bool {
         false
     }
 }
 
-impl<T: PartialOrd> PartialOrd for BoundedInterval<T> {
+impl<T: PartialOrd<T>> PartialOrd<Self> for BoundedInterval<T> {
     #[must_use]
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         if self.upper < other.lower {
             Some(Ordering::Less)
         } else if self.lower > other.upper {
+            Some(Ordering::Greater)
+        } else {
+            None
+        }
+    }
+}
+
+impl<T> PartialEq<T> for BoundedInterval<T> {
+    fn eq(&self, _other: &T) -> bool {
+        false
+    }
+}
+
+impl<T: PartialOrd<T>> PartialOrd<T> for BoundedInterval<T> {
+    #[must_use]
+    fn partial_cmp(&self, other: &T) -> Option<Ordering> {
+        if &self.upper < other {
+            Some(Ordering::Less)
+        } else if &self.lower > other {
             Some(Ordering::Greater)
         } else {
             None

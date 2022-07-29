@@ -88,14 +88,14 @@ where
     }
 }
 
-impl<T> PartialEq for CenteredInterval<T> {
+impl<T> PartialEq<Self> for CenteredInterval<T> {
     #[must_use]
     fn eq(&self, _other: &Self) -> bool {
         false
     }
 }
 
-impl<T> PartialOrd for CenteredInterval<T>
+impl<T> PartialOrd<Self> for CenteredInterval<T>
 where
     T: Copy + Sub<Output = T> + Add<Output = T> + PartialOrd,
 {
@@ -104,6 +104,28 @@ where
         if self.upper() < other.lower() {
             Some(Ordering::Less)
         } else if self.lower() > other.upper() {
+            Some(Ordering::Greater)
+        } else {
+            None
+        }
+    }
+}
+
+impl<T> PartialEq<T> for CenteredInterval<T> {
+    fn eq(&self, _other: &T) -> bool {
+        false
+    }
+}
+
+impl<T> PartialOrd<T> for CenteredInterval<T>
+where
+    T: PartialOrd<T> + Copy + Sub<Output = T> + Add<Output = T>,
+{
+    #[must_use]
+    fn partial_cmp(&self, other: &T) -> Option<Ordering> {
+        if &self.upper() < other {
+            Some(Ordering::Less)
+        } else if &self.lower() > other {
             Some(Ordering::Greater)
         } else {
             None

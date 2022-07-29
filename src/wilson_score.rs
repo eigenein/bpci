@@ -1,13 +1,10 @@
-use num_traits::{Float, One, PrimInt, Unsigned};
+use num_traits::{Float, One};
 
 use crate::{Interval, Sample};
 
 impl<F: Float + One> Interval<F> {
     /// [Wilson score interval](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval)
-    pub fn wilson_score_interval<N: PrimInt + Unsigned + Into<F>>(
-        sample: &impl Sample<N, F>,
-        z_level: F,
-    ) -> Self {
+    pub fn wilson_score_interval<N: Into<F>>(sample: &impl Sample<N, F>, z_level: F) -> Self {
         let sample_size = sample.size().into();
         let p_hat = sample.p_hat();
 

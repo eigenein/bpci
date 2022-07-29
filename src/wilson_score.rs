@@ -1,3 +1,5 @@
+//! Wilson score intervals.
+
 use std::ops::Add;
 
 use num_traits::{Float, One};

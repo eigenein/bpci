@@ -1,3 +1,5 @@
+//! Sample trait and structures.
+
 pub mod n_successes;
 pub mod p_hat;
 

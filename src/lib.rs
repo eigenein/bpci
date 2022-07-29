@@ -1,3 +1,5 @@
+//! Binomial proportion confidence intervals.
+
 pub mod error;
 pub mod interval;
 pub mod result;

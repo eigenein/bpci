@@ -1,3 +1,5 @@
+//! Interval trait and structures.
+
 pub mod lower_upper;
 pub mod mean_margin;
 

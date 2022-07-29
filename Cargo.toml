@@ -7,7 +7,7 @@ authors = ["Pavel Perestoronin <eigenein@gmail.com>"]
 readme = "README.md"
 repository = "https://github.com/eigenein/bpci"
 license = "MIT"
-keywords = ["statistics", "data-analysis", "wilson-score", "proportion", "binomial", "agresti-coull", "wald", "interval"]
+keywords = ["statistics", "data-analysis", "proportion", "binomial", "interval"]
 categories = ["mathematics", "science", "algorithms"]
 
 [features]

@@ -31,6 +31,8 @@ fn main() {
 }
 ```
 
+## Intervals
+
 ### [Wilson score interval](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval)
 
 ```rust

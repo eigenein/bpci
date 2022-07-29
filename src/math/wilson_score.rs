@@ -1,6 +1,6 @@
 //! Wilson score intervals.
 
-use std::ops::Add;
+use std::ops::{Add, Div};
 
 use num_traits::{Float, One};
 
@@ -8,7 +8,7 @@ use crate::interval::{LowerUpperInterval, MeanMarginInterval};
 use crate::Sample;
 
 pub trait WilsonScore<F, N> {
-    /// [Wilson score interval](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval)
+    /// [Wilson score interval](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval).
     fn wilson_score(&self, z_level: F) -> MeanMarginInterval<F>;
 
     /// [Wilson score interval with continuity correction](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval_with_continuity_correction)
@@ -19,7 +19,7 @@ pub trait WilsonScore<F, N> {
 impl<S, F, N> WilsonScore<F, N> for S
 where
     S: Sample<N, F>,
-    F: Float + One,
+    F: Float,
     N: Into<F>,
 {
     fn wilson_score(&self, z_level: F) -> MeanMarginInterval<F> {
@@ -72,7 +72,10 @@ fn one_two_four<F: Copy + One + Add<Output = F>>() -> (F, F, F) {
 }
 
 #[inline]
-fn a_b<F: Float>(sample_size: F, z_level: F) -> (F, F) {
+fn a_b<F>(sample_size: F, z_level: F) -> (F, F)
+where
+    F: One + Copy + Div<Output = F> + Add<Output = F>,
+{
     let one = F::one();
     let a = z_level * z_level / sample_size;
     let b = one / (one + a);
@@ -88,7 +91,7 @@ mod tests {
     #[test]
     /// Verified with Wolfram Alpha.
     fn wilson_score_ok() {
-        let sample = NSuccessesSample::new(20_u32, 8_u32).unwrap();
+        let sample = NSuccessesSample::new(20, 8).unwrap();
         let interval = sample.wilson_score(1.960);
         assert_relative_eq!(interval.lower(), 0.2188039674141927);
         assert_relative_eq!(interval.upper(), 0.613422057684794);
@@ -97,7 +100,7 @@ mod tests {
     #[test]
     /// Verified with Wolfram Alpha.
     fn wilson_score_with_cc_ok() {
-        let sample = PHatSample::new(20_u32, 0.4).unwrap();
+        let sample = PHatSample::new(20, 0.4).unwrap();
         let interval = sample.wilson_score_with_cc(1.960);
         assert_relative_eq!(interval.lower, 0.19976843301470645);
         assert_relative_eq!(interval.upper, 0.6358867106798909);

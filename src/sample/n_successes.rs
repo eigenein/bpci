@@ -1,6 +1,7 @@
 use std::fmt::Debug;
+use std::ops::Div;
 
-use num_traits::{Float, Zero};
+use num_traits::Zero;
 
 use crate::{Error, Result, Sample};
 
@@ -25,7 +26,11 @@ impl<N: Zero + Debug + PartialOrd> NSuccessesSample<N> {
     }
 }
 
-impl<N: Copy + Into<P>, P: Float> Sample<N, P> for NSuccessesSample<N> {
+impl<N, P> Sample<N, P> for NSuccessesSample<N>
+where
+    N: Copy + Into<P>,
+    P: Div<Output = P>,
+{
     fn size(&self) -> N {
         self.size
     }

@@ -38,7 +38,7 @@ use bpci::*;
 use approx::assert_relative_eq;
 
 fn main() {
-    let sample = PHatSample::new(100_u32, 0.25).unwrap();
+    let sample = PHatSample::new(100, 0.25).unwrap();
     let interval = sample.wilson_score(1.960); // 95%
     assert_relative_eq!(interval.lower(), 0.1754509400372426);
     assert_relative_eq!(interval.upper(), 0.3430464637007583);
@@ -52,9 +52,37 @@ use bpci::*;
 use approx::assert_relative_eq;
 
 fn main() {
-    let sample = PHatSample::new(100_u32, 0.25).unwrap();
+    let sample = PHatSample::new(100, 0.25).unwrap();
     let interval = sample.wilson_score_with_cc(1.960); // 95%
     assert_relative_eq!(interval.lower(), 0.17117438961361867);
     assert_relative_eq!(interval.upper(), 0.34838596518606424);
+}
+```
+
+### [Agresti–Coull interval](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Agresti%E2%80%93Coull_interval)
+
+```rust
+use bpci::*;
+use approx::assert_relative_eq;
+
+fn main() {
+    let sample = PHatSample::new(40, 0.25).unwrap();
+    let interval = sample.agresti_coull(1.960); // 95%
+    assert_relative_eq!(interval.mean, 0.2719061348125981);
+    assert_relative_eq!(interval.margin, 0.1317091851034039);
+}
+```
+
+### [Normal approximation interval or Wald interval](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Normal_approximation_interval_or_Wald_interval)
+
+```rust
+use bpci::*;
+use approx::assert_relative_eq;
+
+fn main() {
+    let sample = PHatSample::new(100, 0.3).unwrap();
+    let interval = sample.wald(1.960); // 95%
+    assert_relative_eq!(interval.lower(), 0.2101815163788655);
+    assert_relative_eq!(interval.upper(), 0.38981848362113447);
 }
 ```

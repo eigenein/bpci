@@ -1,13 +1,14 @@
 use std::fmt::Debug;
+use std::ops::Div;
 
 use num_traits::{One, Zero};
 
-use crate::{Error, Result, Sample};
+use crate::{Error, NSuccessesSample, Result, Sample};
 
 /// Represents a sample with its size and proportion.
 pub struct PHatSample<N, P> {
-    size: N,
-    proportion: P,
+    pub(crate) size: N,
+    pub(crate) proportion: P,
 }
 
 impl<N, P> PHatSample<N, P>
@@ -33,5 +34,18 @@ impl<N: Copy, P: Copy> Sample<N, P> for PHatSample<N, P> {
 
     fn p_hat(&self) -> P {
         self.proportion
+    }
+}
+
+impl<N, P> From<NSuccessesSample<N>> for PHatSample<N, P>
+where
+    N: Copy + Into<P>,
+    P: Div<Output = P>,
+{
+    fn from(other: NSuccessesSample<N>) -> Self {
+        Self {
+            size: other.size(),
+            proportion: other.p_hat(),
+        }
     }
 }

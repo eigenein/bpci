@@ -3,18 +3,19 @@ use std::ops::{Add, Div, Mul, Sub};
 
 use num_traits::One;
 
-use crate::{Interval, MeanMarginInterval};
+use crate::{CenteredInterval, Interval};
 
 /// Interval represented by its lower and upper bounds.
 #[must_use]
 #[derive(Clone)]
-pub struct LowerUpperInterval<T> {
+pub struct BoundedInterval<T> {
     pub(crate) lower: T,
     pub(crate) upper: T,
 }
 
-impl<T: Copy + One + Add<Output = T> + Sub<Output = T> + Div<Output = T>> Interval<T>
-    for LowerUpperInterval<T>
+impl<T> Interval<T> for BoundedInterval<T>
+where
+    T: Copy + One + Add<Output = T> + Sub<Output = T> + Div<Output = T>,
 {
     #[inline]
     fn mean(&self) -> T {
@@ -42,11 +43,11 @@ impl<T: Copy + One + Add<Output = T> + Sub<Output = T> + Div<Output = T>> Interv
     }
 }
 
-impl<T> From<MeanMarginInterval<T>> for LowerUpperInterval<T>
+impl<T> From<CenteredInterval<T>> for BoundedInterval<T>
 where
     T: Copy + Add<Output = T> + Sub<Output = T>,
 {
-    fn from(interval: MeanMarginInterval<T>) -> Self {
+    fn from(interval: CenteredInterval<T>) -> Self {
         Self {
             lower: interval.lower(),
             upper: interval.upper(),
@@ -54,7 +55,7 @@ where
     }
 }
 
-impl<T> Add<T> for LowerUpperInterval<T>
+impl<T> Add<T> for BoundedInterval<T>
 where
     T: Copy + Add<Output = T>,
 {
@@ -68,7 +69,7 @@ where
     }
 }
 
-impl<T> Mul<T> for LowerUpperInterval<T>
+impl<T> Mul<T> for BoundedInterval<T>
 where
     T: Copy + Mul<Output = T>,
 {
@@ -82,14 +83,14 @@ where
     }
 }
 
-impl<T> PartialEq for LowerUpperInterval<T> {
+impl<T> PartialEq for BoundedInterval<T> {
     #[must_use]
     fn eq(&self, _other: &Self) -> bool {
         false
     }
 }
 
-impl<T: PartialOrd> PartialOrd for LowerUpperInterval<T> {
+impl<T: PartialOrd> PartialOrd for BoundedInterval<T> {
     #[must_use]
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         if self.upper < other.lower {

@@ -4,16 +4,16 @@ use std::ops::{Add, Div};
 
 use num_traits::{Float, One};
 
-use crate::interval::{LowerUpperInterval, MeanMarginInterval};
+use crate::interval::{BoundedInterval, CenteredInterval};
 use crate::Sample;
 
 pub trait WilsonScore<F, N> {
     /// [Wilson score interval](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval).
-    fn wilson_score(&self, z_level: F) -> MeanMarginInterval<F>;
+    fn wilson_score(&self, z_level: F) -> CenteredInterval<F>;
 
     /// [Wilson score interval with continuity correction](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval_with_continuity_correction)
     /// as per [Wallis (2021)](https://www.routledge.com/Statistics-in-Corpus-Linguistics-Research-A-New-Approach/Wallis/p/book/9781138589384).
-    fn wilson_score_with_cc(&self, z_level: F) -> LowerUpperInterval<F>;
+    fn wilson_score_with_cc(&self, z_level: F) -> BoundedInterval<F>;
 }
 
 impl<S, F, N> WilsonScore<F, N> for S
@@ -22,14 +22,14 @@ where
     F: Float,
     N: Into<F>,
 {
-    fn wilson_score(&self, z_level: F) -> MeanMarginInterval<F> {
+    fn wilson_score(&self, z_level: F) -> CenteredInterval<F> {
         let (one, two, four) = one_two_four();
 
         let sample_size = self.size().into();
         let p_hat = self.p_hat();
         let (a, b) = a_b(sample_size, z_level);
 
-        MeanMarginInterval {
+        CenteredInterval {
             mean: b * (p_hat + a / two),
             margin: z_level
                 * b
@@ -37,7 +37,7 @@ where
         }
     }
 
-    fn wilson_score_with_cc(&self, z_level: F) -> LowerUpperInterval<F> {
+    fn wilson_score_with_cc(&self, z_level: F) -> BoundedInterval<F> {
         let (one, two, four) = one_two_four();
 
         let sample_size = self.size().into();
@@ -50,7 +50,7 @@ where
         let half_a = a / two;
         let quarter_sized_a = a / sample_size / four;
 
-        LowerUpperInterval {
+        BoundedInterval {
             lower: b * (lower_p_hat + half_a)
                 - z_level
                     * b

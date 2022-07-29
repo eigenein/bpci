@@ -3,17 +3,17 @@ use std::ops::{Add, Div, Mul, Sub};
 
 use num_traits::One;
 
-use crate::{Interval, LowerUpperInterval};
+use crate::{BoundedInterval, Interval};
 
 /// Represents an interval with its mean and margin.
 #[must_use]
 #[derive(Clone)]
-pub struct MeanMarginInterval<T> {
+pub struct CenteredInterval<T> {
     pub mean: T,
     pub margin: T,
 }
 
-impl<T: Add<Output = T> + Sub<Output = T> + Copy> Interval<T> for MeanMarginInterval<T> {
+impl<T: Add<Output = T> + Sub<Output = T> + Copy> Interval<T> for CenteredInterval<T> {
     #[inline]
     fn mean(&self) -> T {
         self.mean
@@ -40,11 +40,11 @@ impl<T: Add<Output = T> + Sub<Output = T> + Copy> Interval<T> for MeanMarginInte
     }
 }
 
-impl<T> From<LowerUpperInterval<T>> for MeanMarginInterval<T>
+impl<T> From<BoundedInterval<T>> for CenteredInterval<T>
 where
     T: Copy + Add<Output = T> + Div<Output = T> + Sub<Output = T> + One,
 {
-    fn from(interval: LowerUpperInterval<T>) -> Self {
+    fn from(interval: BoundedInterval<T>) -> Self {
         Self {
             mean: interval.mean(),
             margin: interval.margin(),
@@ -52,7 +52,7 @@ where
     }
 }
 
-impl<T> Add<T> for MeanMarginInterval<T>
+impl<T> Add<T> for CenteredInterval<T>
 where
     T: Copy + Add<Output = T>,
 {
@@ -66,7 +66,7 @@ where
     }
 }
 
-impl<T> Mul<T> for MeanMarginInterval<T>
+impl<T> Mul<T> for CenteredInterval<T>
 where
     T: Copy + Mul<Output = T>,
 {
@@ -80,14 +80,14 @@ where
     }
 }
 
-impl<T> PartialEq for MeanMarginInterval<T> {
+impl<T> PartialEq for CenteredInterval<T> {
     #[must_use]
     fn eq(&self, _other: &Self) -> bool {
         false
     }
 }
 
-impl<T> PartialOrd for MeanMarginInterval<T>
+impl<T> PartialOrd for CenteredInterval<T>
 where
     T: Copy + Sub<Output = T> + Add<Output = T> + PartialOrd,
 {

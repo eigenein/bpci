@@ -1,10 +1,10 @@
 //! Interval trait and structures.
 
-pub mod lower_upper;
-pub mod mean_margin;
+pub mod bounded;
+pub mod centered;
 
-pub use self::lower_upper::*;
-pub use self::mean_margin::*;
+pub use self::bounded::*;
+pub use self::centered::*;
 
 pub trait Interval<F> {
     /// Returns the interval's mean.

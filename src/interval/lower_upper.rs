@@ -1,3 +1,4 @@
+use std::cmp::Ordering;
 use std::ops::{Add, Div, Mul, Sub};
 
 use num_traits::One;
@@ -77,6 +78,26 @@ where
         Self {
             lower: self.lower * rhs,
             upper: self.upper * rhs,
+        }
+    }
+}
+
+impl<T> PartialEq for LowerUpperInterval<T> {
+    #[must_use]
+    fn eq(&self, _other: &Self) -> bool {
+        false
+    }
+}
+
+impl<T: PartialOrd> PartialOrd for LowerUpperInterval<T> {
+    #[must_use]
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        if self.upper < other.lower {
+            Some(Ordering::Less)
+        } else if self.lower > other.upper {
+            Some(Ordering::Greater)
+        } else {
+            None
         }
     }
 }

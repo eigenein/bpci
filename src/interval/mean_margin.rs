@@ -1,3 +1,4 @@
+use std::cmp::Ordering;
 use std::ops::{Add, Div, Mul, Sub};
 
 use num_traits::One;
@@ -75,6 +76,29 @@ where
         Self {
             mean: self.mean * rhs,
             margin: self.margin * rhs,
+        }
+    }
+}
+
+impl<T> PartialEq for MeanMarginInterval<T> {
+    #[must_use]
+    fn eq(&self, _other: &Self) -> bool {
+        false
+    }
+}
+
+impl<T> PartialOrd for MeanMarginInterval<T>
+where
+    T: Copy + Sub<Output = T> + Add<Output = T> + PartialOrd,
+{
+    #[must_use]
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        if self.upper() < other.lower() {
+            Some(Ordering::Less)
+        } else if self.lower() > other.upper() {
+            Some(Ordering::Greater)
+        } else {
+            None
         }
     }
 }

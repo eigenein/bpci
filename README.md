@@ -75,6 +75,18 @@ fn main() {
 }
 ```
 
+```rust
+use bpci::*;
+use approx::assert_relative_eq;
+
+fn main() {
+    let sample = NSuccessesSample::new(40, 10).unwrap();
+    let interval = sample.agresti_coull(1.960); // 95%
+    assert_relative_eq!(interval.mean, 0.2719061348125981);
+    assert_relative_eq!(interval.margin, 0.1317091851034039);
+}
+```
+
 ### [Normal approximation interval or Wald interval](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Normal_approximation_interval_or_Wald_interval)
 
 ```rust

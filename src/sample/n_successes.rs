@@ -8,7 +8,7 @@ use crate::{Error, Result, Sample};
 /// Represents a sample as size and number of successes.
 pub struct NSuccessesSample<N> {
     size: N,
-    n_successes: N,
+    pub(crate) n_successes: N,
 }
 
 impl<N: Zero + Debug + PartialOrd> NSuccessesSample<N> {

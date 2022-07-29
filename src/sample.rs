@@ -1,36 +1,65 @@
 use std::fmt::Debug;
 
-use num_traits::{Float, PrimInt, Unsigned};
+use num_traits::{Float, One, Unsigned, Zero};
 
-use crate::{Error, Proportion, Result};
+use crate::{Error, Result};
 
-pub struct Sample<N, P> {
-    pub(crate) size: N,
-    proportion: Proportion<N, P>,
+pub trait Sample<N, P> {
+    fn size(&self) -> N;
+    fn p_hat(&self) -> P;
 }
 
-impl<N, P> Sample<N, P>
-where
-    N: Unsigned + Debug + PartialOrd,
-{
-    pub fn new(size: N, proportion: Proportion<N, P>) -> Result<Self> {
-        if let Proportion::NSuccesses(n_successes) = &proportion {
-            if n_successes > &size {
-                return Err(Error::OutOfRange(format!(
-                    "`{:?}` is out of range 0..{:?}",
-                    n_successes, size
-                )));
-            }
+/// Represents a sample as size and number of successes.
+pub struct NSuccessesSample<N> {
+    size: N,
+    n_successes: N,
+}
+
+impl<N: Unsigned + Debug + PartialOrd> NSuccessesSample<N> {
+    pub fn new(size: N, n_successes: N) -> Result<Self> {
+        if n_successes <= size {
+            Ok(Self { size, n_successes })
+        } else {
+            Err(Error::OutOfRange(format!(
+                "`{:?}` is out of range 0..=`{:?}`",
+                n_successes, size
+            )))
         }
-        Ok(Self { size, proportion })
     }
 }
 
-impl<N: PrimInt + Unsigned + Into<F>, F: Float> Sample<N, F> {
-    pub fn p_hat(&self) -> F {
-        match self.proportion {
-            Proportion::PHat(p_hat) => p_hat,
-            Proportion::NSuccesses(n_successes) => n_successes.into() / self.size.into(),
+impl<N: Copy + Into<P>, P: Float> Sample<N, P> for NSuccessesSample<N> {
+    fn size(&self) -> N {
+        self.size
+    }
+
+    fn p_hat(&self) -> P {
+        self.n_successes.into() / self.size.into()
+    }
+}
+
+/// Represents a sample with its size and proportion.
+pub struct PHatSample<N, P> {
+    size: N,
+    proportion: P,
+}
+
+impl<N, P: Zero + One + Debug + PartialOrd> PHatSample<N, P> {
+    pub fn new(size: N, proportion: P) -> Result<Self> {
+        if proportion >= P::zero() && proportion <= P::one() {
+            Ok(Self { size, proportion })
+        } else {
+            Err(Error::OutOfRange(format!("`{:?}` is out of range 0..=1", proportion)))
         }
+    }
+}
+
+impl<N: Copy, P: Copy> Sample<N, P> for PHatSample<N, P> {
+    fn size(&self) -> N {
+        self.size
+    }
+
+    fn p_hat(&self) -> P {
+        self.proportion
     }
 }

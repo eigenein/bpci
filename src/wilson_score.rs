@@ -2,15 +2,14 @@ use num_traits::{Float, One, PrimInt, Unsigned};
 
 use crate::{Interval, Sample};
 
-impl<N, F> Sample<N, F>
-where
-    F: Float + One,
-    N: PrimInt + Unsigned + Into<F>,
-{
+impl<F: Float + One> Interval<F> {
     /// [Wilson score interval](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval)
-    pub fn wilson_score_interval(&self, z_level: F) -> Interval<F> {
-        let sample_size = self.size.into();
-        let p_hat = self.p_hat();
+    pub fn wilson_score_interval<N: PrimInt + Unsigned + Into<F>>(
+        sample: &impl Sample<N, F>,
+        z_level: F,
+    ) -> Self {
+        let sample_size = sample.size().into();
+        let p_hat = sample.p_hat();
 
         let one = F::one();
         let two = F::one() + F::one();
@@ -31,13 +30,12 @@ where
 mod tests {
     use approx::assert_relative_eq;
 
-    use super::*;
-    use crate::Proportion;
+    use crate::*;
 
     #[test]
     fn wilson_score_ok() {
-        let sample = Sample::new(20, Proportion::NSuccesses(10_u32)).unwrap();
-        let interval = sample.wilson_score_interval(1.960);
+        let sample = NSuccessesSample::new(20_u32, 10_u32).unwrap();
+        let interval = Interval::wilson_score_interval(&sample, 1.960);
         assert_relative_eq!(interval.mean, 0.5);
         assert_relative_eq!(interval.margin, 0.20070508557018008);
     }

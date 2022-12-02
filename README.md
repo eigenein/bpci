@@ -6,7 +6,7 @@ Binomial proportion confidence intervals.
 [![Last commit](https://img.shields.io/github/last-commit/eigenein/bpci)](https://github.com/eigenein/bpci/commits/master)
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/eigenein/bpci/Check)](https://github.com/eigenein/bpci/actions)
 ![License: MIT](https://img.shields.io/crates/l/bpci)
-[![docs.rs](https://img.shields.io/docsrs/bpci)](https://docs.rs/bpci/0.1.0/bpci/)
+[![docs.rs](https://img.shields.io/docsrs/bpci)](https://docs.rs/bpci)
 
 ## Samples
 
